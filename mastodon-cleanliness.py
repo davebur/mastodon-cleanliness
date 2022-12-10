@@ -8,7 +8,6 @@ from mastodon import Mastodon
 base_url = 'https://CHANGE_TO_YOUR_MASTODON_INSTANCE'
 token_file = 'access_token.txt'
 max_result_returned = 40
-more_accounts = True
 
 mastodon = Mastodon(
     access_token=token_file,
@@ -18,12 +17,11 @@ mastodon = Mastodon(
 user_dict = mastodon.account_verify_credentials()
 
 # Get list of accounts that are following me
-more_accounts = True
-
 followers_list_accounts = {}
 my_followers = {}
 
 #print ("My followers are ...")
+more_accounts = True
 while more_accounts:
     if len(followers_list_accounts) == 0:
         followers_list_accounts = mastodon.account_followers(user_dict.id, limit=max_result_returned)
@@ -86,7 +84,6 @@ for list in my_lists:
             more_accounts = False
 
 print ("Folks I'm following but are not in lists...")
-
 for user in following_ids:
     print (f"\t{following_ids[user]}")
 
