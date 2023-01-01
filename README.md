@@ -20,6 +20,6 @@ You need an auth token.
  - read:lists
 4. Put the access token into a file called access_token.txt
 
-Finally, edit the script and set the base_url variable to your chosen mastodon server.
+Finally, edit the script and set the BASE_URL variable to your chosen mastodon server.
 
 Now you can run the script.
