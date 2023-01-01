@@ -11,7 +11,7 @@ import sys
 from mastodon import Mastodon
 
 # Change this to the server that you are using
-BASE_URL = 'https://ioc.exchange'
+BASE_URL = 'https://CHANGE_TO_YOUR_MASTODON_INSTANCE'
 TOKEN_FILE = 'access_token.txt'
 # https://mastodonpy.readthedocs.io/en/stable/01_general.html#pagination says that
 # 40 is the max returned, so let's stick with that
