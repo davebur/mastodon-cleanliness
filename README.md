@@ -12,12 +12,13 @@ You need to install Mastodon.py by running:
 
 # Setup
 You need an auth token.
-1. Go to Settings -> Development -> New Application
-2. Give the application the following permissions:
+1. Go to the website of the Mastodon server instance that you are using.
+2. Go to Settings -> Development -> New Application
+3. Give the application the following permissions:
  - read
  - read:follows
  - read:lists
-3. Put the access token into a file called access_token.txt
+4. Put the access token into a file called access_token.txt
 
 Finally, edit the script and set the base_url variable to your chosen mastodon server.
 
