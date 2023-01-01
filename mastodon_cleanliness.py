@@ -8,7 +8,11 @@ all present in at least one list
 import logging
 import os.path
 import sys
-from mastodon import Mastodon
+from mastodon import (
+    Mastodon,
+    MastodonError,
+    MastodonUnauthorizedError
+)
 
 # Change this to the server that you are using
 BASE_URL = 'https://CHANGE_TO_YOUR_MASTODON_INSTANCE'
@@ -38,7 +42,7 @@ else:
 # but also gives us the id of the user, which we need later on.
 try:
     user_dict = mastodon.account_verify_credentials()
-except Exception as error:
+except MastodonUnauthorizedError as error:
     print ("Error occured when trying to validate your credentials.")
     logging.critical("Here is the raw error message...%s", error)
     sys.exit(1)
@@ -58,7 +62,7 @@ while MORE_ACCOUNTS:
         try:
             followers_list_accounts = mastodon.account_followers(user_dict.id,
                 limit=MAX_RESULT_RETURNED)
-        except Exception as error:
+        except MastodonError as error:
             print ("Something when wrong when getting your list of followers.")
             print ("Bravely going to try to continue....")
             logging.critical("Error returned was %s", error)
@@ -67,7 +71,7 @@ while MORE_ACCOUNTS:
         logging.info ("Something in followers_list_accounts, pagination, getting next...")
         try:
             followers_list_accounts = mastodon.fetch_next(followers_list_accounts)
-        except Exception as error:
+        except MastodonError as error:
             print ("Something when wrong when getting your list of followers.")
             print ("Bravely going to try to continue....")
             logging.critical("Error returned was %s", error)
@@ -94,7 +98,7 @@ while MORE_ACCOUNTS:
         logging.info ("Nothing in follows, getting first time..")
         try:
             follows = mastodon.account_following(user_dict.id, limit=MAX_RESULT_RETURNED)
-        except Exception as error:
+        except MastodonError as error:
             print ("Something went wrong getting the list of folks you are following.")
             print ("Attempting to continue...")
             logging.critical("Error returned was....%s", error)
@@ -103,7 +107,7 @@ while MORE_ACCOUNTS:
         logging.info ("Something in follows, pagination, getting next...")
         try:
             follows = mastodon.fetch_next(follows)
-        except Exception as error:
+        except MastodonError as error:
             print ("Something went wrong getting the list of folks you are following.")
             print ("Attempting to continue...")
             logging.critical("Error returned was....%s", error)
@@ -124,7 +128,7 @@ while MORE_ACCOUNTS:
 # My lists
 try:
     my_lists = mastodon.lists()
-except Exception as error:
+except MastodonError as error:
     print ("Something went wrong getting all of your lists. Attempting to continue...")
     logging.critical("Error returned was....%s", error)
 
@@ -137,14 +141,14 @@ for mlist in my_lists:
         if len(list_accounts) == 0:
             try:
                 list_accounts = mastodon.list_accounts(mlist.id, limit=MAX_RESULT_RETURNED)
-            except Exception as error:
+            except MastodonError as error:
                 print ("Something went wrong getting a list of your lists.")
                 print ("Attempting to continue...")
                 logging.critical("Error returned was...%s", error)
         else:
             try:
                 list_accounts = mastodon.fetch_next(list_accounts)
-            except Exception as error:
+            except MastodonError as error:
                 print ("Something went wrong getting a list of your lists.")
                 print ("Attempting to continue...")
                 logging.critical("Error returned was...%s", error)
@@ -157,9 +161,9 @@ for mlist in my_lists:
             MORE_ACCOUNTS = False
 
 print ("Folks I'm following but are not in lists...")
-for user in following_ids:
-    print (f"\t{following_ids[user]}")
+for user_id, user in following_ids:
+    print (f"\t{user}")
 
 print ("\nWho I'm not following back ...")
-for user in my_followers:
-    print (f"\t{my_followers[user]}")
+for user_id, user in my_followers.items():
+    print (f"\t{user}")
