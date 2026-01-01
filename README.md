@@ -20,6 +20,25 @@ You need an auth token.
  - read:lists
 4. Put the access token into a file called access_token.txt
 
-Finally, edit the script and set the BASE_URL variable to your chosen mastodon server.
+# Usage
 
-Now you can run the script.
+You can run the script directly. By default, it looks for `access_token.txt` in the current directory and uses a placeholder base URL (which you can change in the script).
+
+However, you can specify these via command line arguments:
+
+```bash
+python3 mastodon_cleanliness.py [-h] [-d] [-u URL] [-t TOKEN]
+```
+
+## Arguments
+
+- `-h`, `--help`: Show the help message and exit.
+- `-d`, `--debug`: Enable debug logging to see more detailed output.
+- `-u URL`, `--url URL`: The Mastodon server URL (e.g., `https://mastodon.social`).
+- `-t TOKEN`, `--token TOKEN`: Path to the access token file.
+
+## Example
+
+```bash
+python3 mastodon_cleanliness.py -u https://mastodon.ie -t ~/.mastodon.ie_access_token.txt -d
+```
